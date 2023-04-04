@@ -2,9 +2,9 @@
 
 
 import java.util.List;
-import java.util.Optional;
 
-import org.apache.catalina.connector.Response;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -36,7 +36,7 @@ public class UsuarioController {
        Usuario usuario = uRepository.findById(id)
                          .orElseThrow( () -> new NotFound("No existe el usuario con el id: " + id));
         
-        return ResponseEntity.ok( usuario);
+        return ResponseEntity.ok( usuario );
     } 
 
     @PostMapping(value = "/nuevo-usuario")
@@ -46,19 +46,19 @@ public class UsuarioController {
     }
 
     @PutMapping(value = "/editar-usuario/{id}")
-    public ResponseEntity<Usuario> editarUsuario(@PathVariable Long id ,@RequestBody Usuario usuarioActualizar){
+    public String editarUsuario(@PathVariable Long id ,@RequestBody Usuario usuarioActualizar){
 
-        Usuario usuario = uRepository.findById(id)
-        .orElseThrow( () -> new NotFound("No existe el usuario con el id: " + id));
+        Usuario updateUsuario = uRepository.findById(id).get();
 
-        usuario.setNombre(usuarioActualizar.getNombre());
-        usuario.setApellido(usuarioActualizar.getApellido());
-        usuario.setEmail(usuarioActualizar.getEmail());
-        usuario.setTelefono(usuarioActualizar.getTelefono());
-        usuario.setPassword(usuarioActualizar.getPassword());
+        updateUsuario.setNombre(usuarioActualizar.getNombre());
+        updateUsuario.setApellido(usuarioActualizar.getApellido());
+        updateUsuario.setEmail(usuarioActualizar.getEmail());
+        updateUsuario.setTelefono(usuarioActualizar.getTelefono());
+        updateUsuario.setPassword(usuarioActualizar.getPassword());
         
+        uRepository.save(updateUsuario);
 
-        return ResponseEntity.ok(usuario);
+        return "";
     }
 
     @DeleteMapping(value = "/usuarios/{id}")
